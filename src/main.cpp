@@ -1,39 +1,58 @@
 #include <iostream>
+#include <string>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
+#include <opencv2/videoio/videoio.hpp>
 using namespace std;
 using namespace cv;
 
-int MAX_KERNEL_LENGTH = 31;
-Mat src; Mat dst;
-
-
 int printUsage(char *programName){
-    cerr << "Usage: " << programName << " <input_file> <output_file>" << endl; 
+    cerr << "Usage: " << programName << " <input_file> <output_file.avi>" << endl; 
     return -1;
 }
 
-int main(int argc, char **argv){
+
+int main(int argc, char *argv[]){
     if(argc != 3){
         return printUsage(argv[0]);
     }
 
-    const char* inputFileName = argv[1];
-    src = imread(inputFileName, IMREAD_COLOR);
-    if(src.empty()){
+    const string inputFileName = argv[1];
+    const string outputFileName = argv[2];
+
+    VideoCapture inputVideo(inputFileName);
+    if(!inputVideo.isOpened()){
         cerr << "Error opening: " << inputFileName << endl; 
-        return printUsage(argv[0]);
+        return -1;
     }
-    dst = src.clone();
+    
+    int videoCodec = static_cast<int>(inputVideo.get(CAP_PROP_FOURCC));
+    Size videoDimensions = Size((int) inputVideo.get(CAP_PROP_FRAME_WIDTH), (int) inputVideo.get(CAP_PROP_FRAME_HEIGHT));
+    VideoWriter outputVideo;
+    outputVideo.open(outputFileName, videoCodec, inputVideo.get(CAP_PROP_FPS), videoDimensions, true);
 
-    for(int i = 1; i < MAX_KERNEL_LENGTH; i = i + 2){
-        medianBlur (src, dst, i);
+    if(!outputVideo.isOpened()){
+        cerr  << "Could not open the output video for write: " << outputFileName << endl;
+        return -1;
     }
-
-    imwrite(argv[2], dst);
+    
+    Mat currentFrame;
+    Mat alteredFrame;
+    
+    //for each frame in input video
+    for(;;){
+        //read frame
+        inputVideo >> currentFrame;
+        // check if at end
+        if(currentFrame.empty()){
+            break;
+        }
+        alteredFrame = currentFrame.clone();
+        
+        //send frame to output
+        outputVideo << alteredFrame;
+    }
 
     return 0;
 }
-
