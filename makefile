@@ -11,7 +11,7 @@ install:
 	mkdir $(OUTPUT_DIR)
 
 $(OUTPUT): $(SOURCE_FILES)
-	g++ -o $(OUTPUT) src/main.cpp -lopencv_imgcodecs -lopencv_core -lopencv_imgproc -lopencv_videoio
+	g++ -o $(OUTPUT) src/main.cpp -Wall -lopencv_imgcodecs -lopencv_core -lopencv_imgproc -lopencv_videoio
 
 $(OUTPUT_PHOTO): $(SOURCE_FILES)
-	g++ -o $(OUTPUT_PHOTO) src/picture.cpp -lopencv_imgcodecs -lopencv_core -lopencv_imgproc
+	g++ -o $(OUTPUT_PHOTO) src/picture.cpp -Wall -lopencv_imgcodecs -lopencv_core -lopencv_imgproc
