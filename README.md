@@ -5,6 +5,7 @@ A command line tool that supports a limited subset of the features of [Dithermar
 ## Dependencies
 
 * OpenCV >= 3.4
+* OpenCL ICD installed
 * g++ >= 7.3.0 or other C++ compiler
 * make
 
