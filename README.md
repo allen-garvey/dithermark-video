@@ -15,7 +15,7 @@ A command line tool that supports a limited subset of the features of [Dithermar
 * `cd` into the repository directory
 * Run `make install`
 * Run `make`
-* Run `./bin/dithermark <video_source.mp4> <video_output.mp4>`
+* Run `./bin/dithermark <video_source.mp4> <video_output.avi>` (note that only avi output is supported)
 
 ## License
 
